@@ -9,8 +9,10 @@ XPA is an X-ray diffraction profile analysis program. Developed by André Santos
 
 Download all files.
 
-In the folder look for the requirements.txt and run: pip install -r requirements.txt
-
+In the folder look for the requirements.txt and run: 
+```
+pip install -r requirements.txt
+```
 For install scipy, use the scipy.exe in the folder.
 
 # How to Use
