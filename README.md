@@ -16,3 +16,9 @@ pip install -r requirements.txt
 For install scipy in windows, use the scipy in this link: https://sourceforge.net/projects/scipy/
 
 # How to Use
+After install requirements.txt 
+
+```
+python XPA_main.py
+```
+For test, i put in folder DATA two files get in: http://mysite.du.edu/~balzar/s-s_rr.htm . 
