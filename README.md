@@ -23,6 +23,7 @@ python XPA_main.py
 ```
 This is the interface of program.
 
-![Screenshot](xirod.regular.png)
+![Screenshot](interface.PNG)
 
 For test, i put in folder DATA two files get in: http://mysite.du.edu/~balzar/s-s_rr.htm . 
+
