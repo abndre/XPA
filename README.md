@@ -1,4 +1,7 @@
 # XPA - X RAY LINE PROFYLE ANALYSIS
+![Screenshot](xirod.regular.png)
+
+
 
 XPA is an X-ray diffraction profile analysis program. Developed by André Santos Barros da Silva and Dr. Lúis Gallego Martinez, together with the CristalMat laboratory and the Nuclear and Energy Research Institute.
 
