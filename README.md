@@ -13,6 +13,6 @@ In the folder look for the requirements.txt and run:
 ```
 pip install -r requirements.txt
 ```
-For install scipy, use the scipy.exe in the folder.
+For install scipy in windows, use the scipy in this link: https://sourceforge.net/projects/scipy/
 
 # How to Use
