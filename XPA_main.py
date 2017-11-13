@@ -27,6 +27,8 @@ import numpy as np
 import copy
 import pylab as pl
 
+import pdb
+
 root = Tk()
 root.title('Notebook')
 Pmw.initialise()
@@ -1506,17 +1508,19 @@ def ScherrerMethod():
         z1=pow(out.best_values['sigma'],2)
         z2=pow(out1.best_values['sigma'],2)
         wg=sqrt(z1-z2)
-        wg = np.degrees(wg)
+        wg = np.radians(wg)
     except:
         pass
 
     cosseno = out.best_values['center']/2
 
-    cosseno = np.degrees(cosseno)
-
+    cosseno = np.radians(cosseno)
+    #pdb.set_trace()
     scherrervalue = (0.89*lambida)/(wg*cosseno)
 
-    print scherrervalue
+    scherrervalue = int (scherrervalue)
+
+    print scherrervalue , ' nm'
 
 #===========================single line double
 def SingleLineDouble():
