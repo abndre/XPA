@@ -8,13 +8,12 @@
 # Copyright:   
 # Licence:     
 #-------------------------------------------------------------------------------
-#http://lmfit.github.io/lmfit-py/builtin_models.html#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles
 from Tkinter import *
 from ttk import *
 from scipy.stats import lognorm
 from tkFileDialog   import askopenfilename
 from tkFileDialog   import askopenfilename
-from lmfit.models import VoigtModel,PseudoVoigtModel, LinearModel
+from lmfit.models import VoigtModel,PseudoVoigtModel, LinearModel, GaussianModel 
 from math import sin,cos,pi,radians,tan,sqrt,log1p,log
 from scipy import stats
 from math import sin, cos
@@ -53,7 +52,7 @@ def radiation(key):
 
 def cristalmat():
     import tkMessageBox
-    tkMessageBox.showinfo("CristalMat",\
+    tkMessageBox.showinfo("XPA - CristalMat",\
     "Este e um programa gratuito\
      \ndesenvolvido e distribuido pelo grupo de pesquisa\nCristalMat -\
     IPEN\nhttp://www.cristalmat.net/")
@@ -62,6 +61,7 @@ def close_window ():
     Fechar()
     root.destroy()
 
+'''
 def LogNormal():
     plt.close()
     global La,Lv
@@ -97,7 +97,7 @@ def LogNormal():
     pl.ylabel('Frequency')
     pl.legend()
     pl.show()
-
+'''
 
 ##############
 #SAMPLE
@@ -546,8 +546,8 @@ def FourierDouble():
     XS=out.values['intercept']/out.values['slope']*-1
     La=int(XS)
 
-    boxLa.delete(0,END)
-    boxLa.insert(1,int(La))
+    #boxLa.delete(0,END)
+    #boxLa.insert(1,int(La))
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
 
@@ -1480,6 +1480,44 @@ def SingleLine():
 
 
 
+def ScherrerMethod():
+    plt.close()
+    print "Scherrer"
+    global x,y,xs,ys,Lv    
+
+    mini,maxi=getminmax()
+    minis,maxis=stgetminmax()
+    x=x[mini:maxi]
+    y=y[mini:maxi]
+    xs=xs[minis:maxis]
+    ys=ys[minis:maxis]
+
+    lambida=radiation(comboBoxrad.get())
+
+    mod = GaussianModel()
+    pars = mod.guess(y, x=x)
+    pars1 = mod.guess(ys, x=xs)
+#    pars['gamma'].set(value=0.7, vary=True, expr='')
+#    pars1['gamma'].set(value=0.7, vary=True, expr='')
+    out  = mod.fit(y, pars, x=x)
+    out1  = mod.fit(ys, pars1, x=xs)    
+
+    try:
+        z1=pow(out.best_values['sigma'],2)
+        z2=pow(out1.best_values['sigma'],2)
+        wg=sqrt(z1-z2)
+        wg = np.degrees(wg)
+    except:
+        pass
+
+    cosseno = out.best_values['center']/2
+
+    cosseno = np.degrees(cosseno)
+
+    scherrervalue = (0.89*lambida)/(wg*cosseno)
+
+    print scherrervalue
+
 #===========================single line double
 def SingleLineDouble():
     plt.close()
@@ -1499,6 +1537,9 @@ def SingleLineDouble():
     y=y[mini:maxi]
     xs=xs[minis:maxis]
     ys=ys[minis:maxis]
+
+
+
 
 
 ##    if str(comboBox.get())=='VoigtModel':
@@ -1590,8 +1631,8 @@ def SingleLineDouble():
     lv=round(lv,1)
     lv=int(lv)
     Lv=lv
-    boxLv.delete(0,END)
-    boxLv.insert(1,int(Lv))
+#    boxLv.delete(0,END)
+#    boxLv.insert(1,int(Lv))
 
     baixo=4*tan(radians(out.best_values['center']/2))
 
@@ -1744,8 +1785,8 @@ texto = Label(p3,text='ANALYSIS ONE PEAKE').place(x=horizontal,y=5)
 vertical=40
 
 
-#btnSingleLine = Button(p3,  text="SCHERRER", command = ScherrerMethod).place(x=horizontal,y=vertical)
-btnSingleLine = Button(p3,  text="SCHERRER").place(x=horizontal,y=vertical)
+btnSingleLine = Button(p3,  text="SCHERRER", command = ScherrerMethod).place(x=horizontal,y=vertical)
+#btnSingleLine = Button(p3,  text="SCHERRER").place(x=horizontal,y=vertical)
 #,state = DISABLED
 #vertical+=30
 #btnFourier = Button(p3,  text="FOURIER", command=Fourier).place(x=horizontal,y=vertical)
