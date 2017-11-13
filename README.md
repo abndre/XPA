@@ -7,6 +7,9 @@ XPA is an X-ray diffraction profile analysis program. Developed by André Santos
 
 # How to Install
 
+First you need the Python 2 installed in your system. Yu can get from here: https://www.python.org/
+The software is made with Python 2, but not have problem to work with python 3.
+
 Download all files.
 
 In the folder look for the requirements.txt and run: 
