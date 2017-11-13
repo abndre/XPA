@@ -1,12 +1,12 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
+# Name:        XPA_main
 # Purpose:
 #
-# Author:      lgallego
+# Author:      Andre S. B. da Silva
 #
 # Created:     23/02/2017
-# Copyright:   (c) lgallego 2017
-# Licence:     <your licence>
+# Copyright:   
+# Licence:     
 #-------------------------------------------------------------------------------
 #http://lmfit.github.io/lmfit-py/builtin_models.html#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles
 from Tkinter import *
@@ -1886,7 +1886,7 @@ comboBoxrad = Combobox(p3, state="readonly", values=("W - 0.0209(nm)",    \
 
 
 comboBoxrad.grid()
-comboBoxrad.set("NN - 0.1033305(nm)")
+comboBoxrad.set("Cu - 0.154(nm)")
 comboBoxrad.place(x=70,y=ak+40)
 comboBoxrad.bind("<FocusIn>", defocus)
 
@@ -1906,6 +1906,6 @@ helpmenu.add_command(label="About", command=cristalmat)
 menubar.add_cascade(label="Help",menu=helpmenu)
 root.config(menu=menubar)
 
-root.title("Cristal Mat - IPEN")
+root.title("XPA - Cristal Mat - IPEN")
 root.geometry("650x380+10+10")
 root.mainloop()
