@@ -352,20 +352,20 @@ def Normalizar():
 
     Plotar()
 
-def Centralizar():
-    global x,y
-    tamanho=len(y)
-    y=normalizar(y)
-    if tamanho/2>y.index(max(y)):
-        #print 'maior',tamanho/2-y.index(max(y))
-        lados=tamanho/2-y.index(max(y))
-    else:
-        #print 'menor'
-        lados=-tamanho/2+y.index(max(y))
-
-    indice=y.index(max(y))+lados
-
-    Plotar()
+#def Centralizar():
+#    global x,y
+#    tamanho=len(y)
+#    y=normalizar(y)
+#    if tamanho/2>y.index(max(y)):
+#        #print 'maior',tamanho/2-y.index(max(y))
+#        lados=tamanho/2-y.index(max(y))
+#    else:
+#        #print 'menor'
+#        lados=-tamanho/2+y.index(max(y))
+#
+#    indice=y.index(max(y))+lados
+#
+#    Plotar()
 
 
 def LorentxPolarization():
@@ -922,7 +922,7 @@ vertical+=30
 ##################################polinomios
 p=9
 w=11
-horizontal_2=200
+horizontal_2=205
 
 xc = Label(p1, text = "Pol")
 xc.place(bordermode = OUTSIDE, height = 30, width = 30, x =horizontal_2,y=vertical )
@@ -942,8 +942,8 @@ wcC.insert(1,int(w))
 pbB.insert(1,int(p))
 
 btnNormalizar = Button(p1, text="SMOOTH", command = Suavizar).place(x=horizontal,y=vertical)
-vertical+=30
-btnCentralizar = Button(p1, text="CENTRALIZE", command = Centralizar).place(x=horizontal,y=vertical)
+#vertical+=30
+#btnCentralizar = Button(p1, text="CENTRALIZE", command = Centralizar).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p1, text="LORENTZPOLARIZATION",state=NORMAL,command = LorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
@@ -952,7 +952,7 @@ vertical+=30
 btnCentralizar = Button(p1, text="BACKGROUND",command = Background).place(x=horizontal,y=vertical)
 
 pback=10
-horizontal_2=210
+horizontal_2=220
 xc = Label(p1, text = "size")
 xc.place(bordermode = OUTSIDE, height = 30, width = 40, x =horizontal_2,y=vertical )
 horizontal_2+=30
@@ -1198,20 +1198,20 @@ def stNormalizar():
 
     stPlotar()
 
-def stCentralizar():
-    global xs,ys
-    tamanho=len(ys)
-    ys=stnormalizar(ys)
-    if tamanho/2>ys.index(max(ys)):
-        #print 'maior',tamanho/2-ys.index(max(ys))
-        lados=tamanho/2-ys.index(max(ys))
-    else:
-        #print 'menor'
-        lados=-tamanho/2+ys.index(max(ys))
-
-    indice=ys.index(max(ys))+lados
-    print "Centralizar"
-    stPlotar()
+#def stCentralizar():
+#    global xs,ys
+#    tamanho=len(ys)
+#    ys=stnormalizar(ys)
+#    if tamanho/2>ys.index(max(ys)):
+#        #print 'maior',tamanho/2-ys.index(max(ys))
+#        lados=tamanho/2-ys.index(max(ys))
+#    else:
+#        #print 'menor'
+#        lados=-tamanho/2+ys.index(max(ys))
+#
+#    indice=ys.index(max(ys))+lados
+#    print "Centralizar"
+#    stPlotar()
 
 
 def stSuavizar():
@@ -1661,7 +1661,7 @@ vertical+=30
 ##################################polinomios
 sp=9
 sw=11
-horizontal_2=200
+horizontal_2=205
 
 sxc = Label(p2, text = "Pol")
 sxc.place(bordermode = OUTSIDE, height = 30, width = 30, x =horizontal_2,y=vertical )
@@ -1683,8 +1683,8 @@ spbB.insert(1,int(sp))
 
 
 btnNormalizar = Button(p2, text="SMOOTH", command = stSuavizar).place(x=horizontal,y=vertical)
-vertical+=30
-btnCentralizar = Button(p2, text="CENTRALIZE", command = stCentralizar).place(x=horizontal,y=vertical)
+#vertical+=30
+#btnCentralizar = Button(p2, text="CENTRALIZE", command = stCentralizar).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p2, text="LORENTZPOLARIZATION",state=NORMAL,command = stLorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
@@ -1693,7 +1693,7 @@ vertical+=30
 btnCentralizar = Button(p2, text="BACKGROUND",command = stBackground).place(x=horizontal,y=vertical)
 
 spback=10
-horizontal_2=210
+horizontal_2=220
 sxc = Label(p2, text = "size")
 sxc.place(bordermode = OUTSIDE, height = 30, width = 40, x =horizontal_2,y=vertical )
 horizontal_2+=30
@@ -1730,7 +1730,7 @@ def getsample():
     scC.insert(1,str(float(cC.get())))
 
 
-btngetsample = Button(p2,  text="Get Sample", command = getsample).place(x=100+50,y=ak+2)
+btngetsample = Button(p2,  text="Get from Sample", command = getsample).place(x=100+50,y=ak+2)
 
 #########################################
 
@@ -1738,50 +1738,51 @@ btngetsample = Button(p2,  text="Get Sample", command = getsample).place(x=100+5
 #P3 ABA
 ########################
 horizontal=5
-texto = Label(p3,text='ANALYSIS SAMPLE').place(x=horizontal,y=5)
+texto = Label(p3,text='ANALYSIS ONE PEAKE').place(x=horizontal,y=5)
 
 
 vertical=40
 
 
-btnSingleLine = Button(p3,  text="SINGLE LINE", command = SingleLine).place(x=horizontal,y=vertical)
+#btnSingleLine = Button(p3,  text="SCHERRER", command = ScherrerMethod).place(x=horizontal,y=vertical)
+btnSingleLine = Button(p3,  text="SCHERRER").place(x=horizontal,y=vertical)
 #,state = DISABLED
-vertical+=30
-btnFourier = Button(p3,  text="FOURIER", command=Fourier).place(x=horizontal,y=vertical)
+#vertical+=30
+#btnFourier = Button(p3,  text="FOURIER", command=Fourier).place(x=horizontal,y=vertical)
 
-btnFLognormal = Button(p3,  text="LOG-NORMAL").place(x=horizontal,y=vertical+30)
+#btnFLognormal = Button(p3,  text="LOG-NORMAL").place(x=horizontal,y=vertical+30)
 
 
 
 
 
 #########################################
-ak=vertical
+#ak=vertical
 ##Fmin=int
 ##Fmax=int
-Fmin=1
-Fmax=5
+#Fmin=1
+#Fmax=5
 
-xc = Label(p3, text = "Min")
-beta=horizontal+80
-xc.place(bordermode = OUTSIDE, height = 30, width = 30, x =beta,y=ak )
-beta+=30
+#xc = Label(p3, text = "Min")
+#beta=horizontal+80
+#xc.place(bordermode = OUTSIDE, height = 30, width = 30, x =beta,y=ak )
+#beta+=30
 
-boxFmin = Entry(p3, textvariable = Fmin)
-boxFmin.place(bordermode = OUTSIDE, height = 30, width = 40, x = beta, y =ak )
-beta+=40
+#boxFmin = Entry(p3, textvariable = Fmin)
+#boxFmin.place(bordermode = OUTSIDE, height = 30, width = 40, x = beta, y =ak )
+#beta+=40
 
-xd = Label(p3, text = "Max")
-xd.place(bordermode = OUTSIDE, height = 30, width = 30, x =beta,y=ak )
-beta+=30
+#xd = Label(p3, text = "Max")
+#xd.place(bordermode = OUTSIDE, height = 30, width = 30, x =beta,y=ak )
+#beta+=30
 
-boxFmax = Entry(p3, textvariable = Fmax)
-boxFmax.place(bordermode = OUTSIDE, height = 30, width = 50, x = beta, y =ak )
+#boxFmax = Entry(p3, textvariable = Fmax)
+#boxFmax.place(bordermode = OUTSIDE, height = 30, width = 50, x = beta, y =ak )
 
-boxFmin.delete(0,END)
-boxFmax.delete(0,END)
-boxFmin.insert(1,int(Fmin))
-boxFmax.insert(1,int(Fmax))
+#boxFmin.delete(0,END)
+#boxFmax.delete(0,END)
+#boxFmin.insert(1,int(Fmin))
+#boxFmax.insert(1,int(Fmax))
 
 #########################################
 ########################
@@ -1800,27 +1801,27 @@ btnFourier = Button(p3,  text="FOURIER", command=FourierDouble).place(x=horizont
 
 ##vertical = vertical+8
 
-btnFLognormal = Button(p3,  text="LOG-NORMAL", command=LogNormal).place(x=horizontal,y=vertical+50)
+#btnFLognormal = Button(p3,  text="LOG-NORMAL", command=LogNormal).place(x=horizontal,y=vertical+50)
 
 
 
-textoLa = Label(p3, text = "LA(nm)")
-textoLa.place(bordermode = OUTSIDE, height = 30, width = 45, x =horizontal+90,y=vertical+30 )
-boxLa = Entry(p3, textvariable = La)
-boxLa.place(bordermode = OUTSIDE, height = 30, width = 40, x = horizontal+140, y =vertical+30 )
+#textoLa = Label(p3, text = "LA(nm)")
+#textoLa.place(bordermode = OUTSIDE, height = 30, width = 45, x =horizontal+90,y=vertical+30 )
+#boxLa = Entry(p3, textvariable = La)
+#boxLa.place(bordermode = OUTSIDE, height = 30, width = 40, x = horizontal+140, y =vertical+30 )
 
-textoLv = Label(p3, text = "LV(nm)")
-textoLv.place(bordermode = OUTSIDE, height = 30, width = 45, x =horizontal+90,y=vertical+70 )
-boxLv = Entry(p3, textvariable = Lv)
-boxLv.place(bordermode = OUTSIDE, height = 30, width = 40, x = horizontal+140, y =vertical+70 )
+#textoLv = Label(p3, text = "LV(nm)")
+#textoLv.place(bordermode = OUTSIDE, height = 30, width = 45, x =horizontal+90,y=vertical+70 )
+#boxLv = Entry(p3, textvariable = Lv)
+#boxLv.place(bordermode = OUTSIDE, height = 30, width = 40, x = horizontal+140, y =vertical+70 )
 
 
 
-boxLa.delete(0,END)
-boxLa.insert(1,int(La))
+#boxLa.delete(0,END)
+#boxLa.insert(1,int(La))
 
-boxLv.delete(0,END)
-boxLv.insert(1,int(Lv))
+#boxLv.delete(0,END)
+#boxLv.insert(1,int(Lv))
 
 
 
@@ -1830,7 +1831,7 @@ Fmin=0
 Fmax=4
 
 xc = Label(p3, text = "Min")
-beta=horizontal+80
+beta=horizontal+85
 xc.place(bordermode = OUTSIDE, height = 30, width = 30, x =beta,y=ak )
 beta+=30
 
@@ -1855,7 +1856,7 @@ boxFmaxst.insert(1,int(Fmax))
 ##########################
 horizontal=350
 vertical=40
-horizontal+=80
+horizontal+=100
 vertical+=2
 def defocus(event):
     event.widget.master.focus_set()
