@@ -55,6 +55,15 @@ def radiation(key):
     }
     return dic[key]
 
+def methodfunciont(key):
+    dic ={
+        "VoigtModel":VoigtModel(),
+        "PseudoVoigtModel":PseudoVoigtModel(),
+        "GaussianModel":GaussianModel()
+    }
+
+    return dic[key]
+
 def cristalmat():
     import tkMessageBox
     tkMessageBox.showinfo("XPA - CristalMat",\
@@ -1313,6 +1322,8 @@ def ScherrerMethod():
     lambida=radiation(comboBoxrad.get())
 
     mod = GaussianModel()
+
+
     pars = mod.guess(y, x=x)
     pars1 = mod.guess(ys, x=xs)
 #    pars['gamma'].set(value=0.7, vary=True, expr='')
@@ -1362,29 +1373,39 @@ def NewSingleLineDouble():
     copyxs=copy.copy(xs)
     copyys=copy.copy(ys)
 
-
-
     mini,maxi=getminmax()
     minis,maxis=stgetminmax()
     x=x[mini:maxi]
     y=y[mini:maxi]
     xs=xs[minis:maxis]
     ys=ys[minis:maxis]
-
-    mod = VoigtModel()
+    #pdb.set_trace()
+    mod = methodfunciont((comboBox1.get()))
+    print mod
+    #mod = VoigtModel()
     pars = mod.guess(y, x=x)
     pars1 = mod.guess(ys, x=xs)
-    pars['gamma'].set(value=0.3, vary=True, expr='')
-    pars1['gamma'].set(value=0.3, vary=True, expr='')
+    try:
+        pars['gamma'].set(value=0.3, vary=True, expr='')
+        pars1['gamma'].set(value=0.3, vary=True, expr='')
+    except:
+        pass
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
-    G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
+    pdb.set_trace()
+
+    try:
+        G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
+        padrao =(2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2
+        amostra =(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2
+    except:
+        G=0
 
     L=np.radians(2*out.best_values['gamma'])*1.57079632679-np.radians(2*out1.best_values['gamma'])*1.57079632679
 
-    padrao =(2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2
-    amostra =(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2
+
+
 
 
     lambida=radiation(comboBoxrad.get()) #nm
@@ -1674,9 +1695,9 @@ comboBox1.bind("<FocusIn>", defocus)
 
 horizontal=90
 vertical=42
-comboBox = Combobox(p3, state="readonly", values=("VoigtModel", "PseudoVoigtModel"))
+comboBox = Combobox(p3, state="readonly", values=("GaussianModel", "PseudoVoigtModel"))
 comboBox.grid()
-comboBox.set("VoigtModel")
+comboBox.set("GaussianModel")
 comboBox.place(x=horizontal,y=vertical)
 comboBox.bind("<FocusIn>", defocus)
 
