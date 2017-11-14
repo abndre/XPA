@@ -830,7 +830,7 @@ p2 = nb.add('STANDARD')
 ##p1_1 = nb.add('SAMPLE 2')
 ##p2_2 = nb.add('STANDARD 2')
 p3 = nb.add('ANALYSIS ONE PEAKE')
-##p4 = nb.add('WARREN AVERBACK')
+p4 = nb.add('ANALYSIS MORE PEAKES')
 
 nb.pack(padx=5, pady=5, fill=BOTH, expand=1)
 
@@ -859,6 +859,11 @@ horizontal=120
 vertical=40
 
 btnNormalizar = Button(p1, text="NORMALIZE", command = Normalizar).place(x=horizontal,y=vertical)
+
+
+texto = Label(p1,text='FOR MORE PEAKES').place(x=horizontal+350,y=vertical-30)
+btnNormalizar = Button(p1, text="ADD PEAKE").place(x=horizontal+350,y=vertical)
+
 vertical+=30
 ##################################polinomios
 p=9
@@ -1497,6 +1502,10 @@ horizontal=120
 vertical=40
 
 btnNormalizar = Button(p2, text="NORMALIZE", command = stNormalizar).place(x=horizontal,y=vertical)
+
+texto = Label(p2,text='FOR MORE PEAKES').place(x=horizontal+350,y=vertical-30)
+btnNormalizar = Button(p2, text="ADD PEAKE").place(x=horizontal+350,y=vertical)
+
 vertical+=30
 ##################################polinomios
 sp=9
@@ -1662,9 +1671,17 @@ btnFourier = Button(p3,  text="FOURIER", command=FourierDouble).place(x=horizont
 
 #boxLv.delete(0,END)
 #boxLv.insert(1,int(Lv))
+#########################################
+#P4 ABA
+########################
+horizontal=5
+vertical =5
+texto = Label(p4,text='Williamson-Hall and Warren-Averbach').place(x=horizontal,y=vertical)
 
+vertical +=50
+texto = Label(p4,text='Under construction').place(x=horizontal,y=vertical)
 
-
+#WINDOW BUTTONS AND POSITIONS
 #########################################
 ak=vertical-3
 Fmin=0
