@@ -1290,11 +1290,18 @@ def SingleLine():
     plt.show()
 
 
+
+
 #Scherrer
 def ScherrerMethod():
     plt.close()
     print "Scherrer"
     global x,y,xs,ys,Lv
+
+    copyx=copy.copy(x)
+    copyy=copy.copy(y)
+    copyxs=copy.copy(xs)
+    copyys=copy.copy(ys)
 
     mini,maxi=getminmax()
     minis,maxis=stgetminmax()
@@ -1335,15 +1342,20 @@ def ScherrerMethod():
     #plt.plot(xs, out1.best_fit, 'k--')
     plt.plot(x, out.best_fit, 'r-')
     plt.plot(x, out.init_fit, 'k--')
+
+    x=copyx
+    xs=copyxs
+    y=copyy
+    ys=copyys
+
     plt.show()
 
 #===========================single line double
-
-#SingleLine Method
-def SingleLineDouble():
+#Single Line
+def NewSingleLineDouble():
     plt.close()
     print "Single Line"
-    global x,y,xs,ys,Lv
+    global x,y,xs,ys
 
     copyx=copy.copy(x)
     copyy=copy.copy(y)
@@ -1359,118 +1371,50 @@ def SingleLineDouble():
     xs=xs[minis:maxis]
     ys=ys[minis:maxis]
 
-
-
-
-
-##    if str(comboBox.get())=='VoigtModel':
-##        mod = VoigtModel()
-##        pars = mod.guess(y, x=x)
-##        pars1 = mod.guess(ys, x=xs)
-##        pars['gamma'].set(value=0.7, vary=True, expr='')
-##        pars1['gamma'].set(value=0.7, vary=True, expr='')
-##        out  = mod.fit(y, pars, x=x)
-##        out1  = mod.fit(ys, pars1, x=xs)
-##
-##    elif str(comboBox.get())=='PseudoVoigtModel':
-##        mod = PseudoVoigtModel()
-##        pars = mod.guess(y, x=x)
-##        pars1 = mod.guess(ys, x=xs)
-##        out  = mod.fit(y, pars, x=x)
-##        out1  = mod.fit(ys, pars1, x=xs)
-
     mod = VoigtModel()
     pars = mod.guess(y, x=x)
     pars1 = mod.guess(ys, x=xs)
-    pars['gamma'].set(value=0.7, vary=True, expr='')
-    pars1['gamma'].set(value=0.7, vary=True, expr='')
+    pars['gamma'].set(value=0.3, vary=True, expr='')
+    pars1['gamma'].set(value=0.3, vary=True, expr='')
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
+    G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
 
-    plt.figure(1)
+    L=np.radians(2*out.best_values['gamma'])*1.57079632679-np.radians(2*out1.best_values['gamma'])*1.57079632679
 
-    plt.subplot(221)
-    plt.plot(x, y,label='sample data',linestyle='-', marker='o')
-    plt.plot(x, out.best_fit, 'r-',label='best sample fit',linestyle='-', marker='o')
-    plt.title('SAMPLE')
-    plt.xlabel('$2\Theta$')
-    plt.ylabel("Intensity")
-    plt.plot(x,y-out.best_fit,label="residuo")
+    padrao =(2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2
+    amostra =(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2
+
+
+    lambida=radiation(comboBoxrad.get()) #nm
+
+    costheta=np.cos(np.radians(out.best_values['center']/2))
+    tantheta=np.tan(np.radians(out.best_values['center']/2))
+
+    RMSS=G/(4*tantheta)
+    RMSS=RMSS*0.7978845608
+
+    D=(lambida)/(L*costheta)
+    D=int(D)
+
+    print 'D',D, 'RMSS',RMSS
+
     plt.grid()
+    plt.xlabel('$2\Theta$',size=15)
+    plt.ylabel("Normalized(u.a)",size=15)
+
+    plt.plot(x,y,'k+',label='Amostra')
+    plt.plot(xs,ys,'k:',label='Padrao')
+    plt.plot(x,out.best_fit, 'k-' ,label='Best Fit')
+    plt.plot(x,y-out.best_fit,'k--',label='Residual')
     plt.legend()
-
-    ##plt.plot(x, out.init_fit, 'k--',label='initial ')
-
-    plt.subplot(222)
-    plt.plot(xs, ys,label='standart data',linestyle='-', marker='o')
-    plt.plot(xs, out1.best_fit, 'r-',label='best standart fit',linestyle='-', marker='o')
-    plt.plot(xs,ys-out1.best_fit,label="residuo")
-    plt.title('STANDARD')
-    plt.xlabel('$2\Theta$')
-    plt.ylabel("Intensity")
-    plt.grid()
-    plt.legend()
-
-    plt.subplot(212)
-
-    plt.plot(x,y,linestyle='-', marker='o')
-    plt.plot(xs,ys,linestyle='-', marker='o')
-    plt.plot(x, out.best_fit, 'r-',linestyle='-', marker='o')
-    plt.plot(xs, out1.best_fit, 'r-',linestyle='-', marker='o')
-    plt.title(str(str(comboBox.get())))
-
-
-    lambida=radiation(comboBoxrad.get())
-
-
-    w=(out.best_values['gamma']-out1.best_values['gamma'])
-    w=w*2#gamma to fwhm
-
-    w=radians(w)
-    w=(pi/2)*w#Integral Breath
-    angulo= cos(radians( out.best_values['center']/2))
-    baixo=w*angulo
-    lv=lambida/baixo
-    lv=round(lv,1)
-    lv=int(lv)
-    Lv=lv
-#    boxLv.delete(0,END)
-#    boxLv.insert(1,int(Lv))
-
-    baixo=4*tan(radians(out.best_values['center']/2))
-
-    try:
-        z1=pow(out.best_values['sigma']*2*sqrt(2*log(2,euler)),2)
-        z2=pow(out.best_values['sigma']*2*sqrt(2*log(2,euler)),2)
-        wg=sqrt(z1-z2)
-    except:
-        wg=0
-
-    wg = sqrt(pi/(4*log(2,euler)))#Integral Breath
-
-    e=wg/baixo
-    err=sqrt((2/pi))*e
-    #err = sqrt(err)
-    err=round(err,3)
-
-
-
-    #t = plt.text(0.5, 0.5, '$L_V(nm)$: '+ str(D) + '\n$<e>$: '+ str(E), transform=plt.subplot(212).transAxes, fontsize=10)
-    #t.set_bbox(dict(color='red', alpha=0.5, edgecolor='red'))
-
-
-    plt.xlabel('$2\Theta$')
-    plt.ylabel("Intensity")
-    plt.plot(x, out.best_fit, 'r-',label='$L_V(nm)$: ' + str(lv)+ '\n$ <e> $: '+ str(err) ,linestyle='-', marker='o')
-    plt.plot(x,y-out.best_fit,label="residuo")
-    plt.legend()
-    plt.grid()
 
     x=copyx
     xs=copyxs
     y=copyy
     ys=copyys
+
 
     plt.show()
 
@@ -1642,7 +1586,7 @@ texto = Label(p3,text='ANALYSIS SAMPLE AND STANDARD').place(x=horizontal,y=5)
 vertical=40
 
 
-btnSingleLine = Button(p3,  text="SINGLE LINE", command = SingleLineDouble).place(x=horizontal,y=vertical)
+btnSingleLine = Button(p3,  text="SINGLE LINE", command = NewSingleLineDouble).place(x=horizontal,y=vertical)
 #,state = DISABLED
 vertical+=30
 btnFourier = Button(p3,  text="FOURIER", command=FourierDouble).place(x=horizontal,y=vertical)
@@ -1680,6 +1624,8 @@ texto = Label(p4,text='Williamson-Hall and Warren-Averbach').place(x=horizontal,
 
 vertical +=50
 texto = Label(p4,text='Under construction').place(x=horizontal,y=vertical)
+
+
 
 #WINDOW BUTTONS AND POSITIONS
 #########################################
