@@ -1292,9 +1292,6 @@ def SingleLine():
         pars = mod.guess(y, x=x)
         out  = mod.fit(y, pars, x=x)
 
-
-
-
     print "Saida de dados"
     print(out.fit_report())
 
@@ -1368,7 +1365,7 @@ def SingleLine():
     plt.show()
 
 
-
+#Scherrer
 def ScherrerMethod():
     plt.close()
     print "Scherrer"
@@ -1408,6 +1405,12 @@ def ScherrerMethod():
     scherrervalue = int (scherrervalue)
 
     print scherrervalue , ' nm'
+    plt.plot(x,y,'bo')
+    #plt.plot(xs,ys)
+    #plt.plot(xs, out1.best_fit, 'k--')
+    plt.plot(x, out.best_fit, 'r-')
+    plt.plot(x, out.init_fit, 'k--')
+    plt.show()
 
 #===========================single line double
 def SingleLineDouble():
