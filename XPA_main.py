@@ -12,13 +12,10 @@ from Tkinter import *
 from ttk import *
 from scipy.stats import lognorm
 from tkFileDialog   import askopenfilename
-from tkFileDialog   import askopenfilename
 from lmfit.models import VoigtModel,PseudoVoigtModel, LinearModel, GaussianModel
 from math import sin,cos,pi,radians,tan,sqrt,log1p,log
 from scipy import stats
-from math import sin, cos
 from scipy.signal import savgol_filter
-
 
 import Pmw
 import sys
@@ -69,43 +66,6 @@ def close_window ():
     Fechar()
     root.destroy()
 
-'''
-def LogNormal():
-    plt.close()
-    global La,Lv
-    sigma = (8.0*Lv)/(9.0*La)
-    sigma = log(sigma,euler)
-    sigma = sqrt(sigma)
-    sigma = pow(sigma,euler)
-
-    Do = copy.copy(sigma)
-    try:
-        Do = pow(Do,euler)
-        Do = log(Do,euler)
-
-
-        Do = Do*(-1*(5/2))
-        Do = pow(Do,euler)
-        Do = (3/2)*La*Do
-    except:
-        Do = La
-
-    print 'Do: ' , Do
-    print 'Sigma: ', sigma
-
-    #=============================
-    mean=Do
-    stddev=sigma
-    x=range(1000)
-    x=np.linspace(0,500,1000)
-
-    dist=lognorm([stddev],loc=mean)
-    pl.plot(x,dist.pdf(x))
-    pl.xlabel('D(nm)')
-    pl.ylabel('Frequency')
-    pl.legend()
-    pl.show()
-'''
 
 ##############
 #SAMPLE
@@ -289,7 +249,7 @@ def Plotar():
         diciosample()
         plt.cla()
         plt.title('Amostra')
-        plt.xlabel('2Theta')
+        plt.xlabel('$2\Theta$')
         plt.ylabel("Intensity")
         plt.plot(x[mini:maxi],y[mini:maxi],linestyle='-', marker='o')
         plt.grid()
@@ -306,7 +266,7 @@ def PlotarBack():
 
         plt.cla()
         plt.title('Amostra')
-        plt.xlabel('2Theta')
+        plt.xlabel('$2\Theta$')
         plt.ylabel("Intensity")
         plt.plot(x[mini:maxi],y[mini:maxi],linestyle='-', marker='o')
         plt.grid()
@@ -323,7 +283,7 @@ def Plotarstandart():
         diciosample()
         plt.cla()
         plt.title('Amostra')
-        plt.xlabel('2Theta')
+        plt.xlabel('$2\Theta$')
         plt.ylabel("Intensity")
         plt.plot(xs[mini:maxi],ys[mini:maxi],linestyle='-', marker='o')
         plt.grid()
@@ -536,9 +496,6 @@ def FourierDouble():
     XS=out.values['intercept']/out.values['slope']*-1
     La=int(XS)
 
-    #boxLa.delete(0,END)
-    #boxLa.insert(1,int(La))
-
     slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
 
 
@@ -695,8 +652,6 @@ def calc_Fourier(x,y):
             armonico.append(i)
 
 
-    #AN=normalizar(AN)
-
     lambida=radiation(comboBoxrad.get())
 
 
@@ -790,9 +745,6 @@ def Fourier():
             AN.append(soma/tamanho)
             armonico.append(i)
 
-
-##    AN=normalizar(AN)
-
     lambida=radiation(comboBoxrad.get())
 
 
@@ -811,7 +763,7 @@ def Fourier():
 
     plt.subplot(221)
     plt.grid()
-    plt.xlabel('position (2theta)')
+    plt.xlabel('position ($2\Theta$)')
     plt.ylabel("Intensity")
     plt.title("SAMPLE")
     plt.plot(x,y,linestyle='-', marker='o')
@@ -883,7 +835,6 @@ p3 = nb.add('ANALYSIS ONE PEAKE')
 nb.pack(padx=5, pady=5, fill=BOTH, expand=1)
 
 #P1
-#Button(p1, text='This is text on page 1', fg='blue').pack(pady=40)
 texto = Label(p1,text='SHOW').place(x=10,y=5)
 
 horizontal=0
@@ -932,8 +883,6 @@ wcC.insert(1,int(w))
 pbB.insert(1,int(p))
 
 btnNormalizar = Button(p1, text="SMOOTH", command = Suavizar).place(x=horizontal,y=vertical)
-#vertical+=30
-#btnCentralizar = Button(p1, text="CENTRALIZE", command = Centralizar).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p1, text="LORENTZPOLARIZATION",state=NORMAL,command = LorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
@@ -971,13 +920,8 @@ cC.place(bordermode = OUTSIDE, height = 30, width = 50, x = 100, y =ak )
 ######################
 #P2 ABA
 
-
 positionstandart=-1
 dicstandart={}
-
-
-
-
 #STANDARD
 def stLorentxPolarization():
     global xs,ys
@@ -990,7 +934,6 @@ def stLorentxPolarization():
     for i in range(len(ys)):
         try:
             ys[i]/=(1+pow(cos(radians( xs[i])),2))/(  cos( radians( xs[i]))*pow(sin( radians( xs[i])),2))
-
         except:
             ys[i]=ys[i]
 
@@ -1001,7 +944,6 @@ def diciostandart():
 
     global xs,ys,positionstandart,dicstandart
     positionstandart+=1
-    #print positionstandart
     dicstandart[positionstandart]={}
     dicstandart[positionstandart]['x']= copy.copy( xs[:])
     dicstandart[positionstandart]['y']= copy.copy( ys[:])
@@ -1009,8 +951,6 @@ def diciostandart():
 
 def returnvaluesstandart():
     global xs,ys,positionstandart,dicstandart
-    print 'voltar'
-    #print positionstandart
     positionstandart-=1
 
 
@@ -1018,7 +958,6 @@ def returnvaluesstandart():
     if  positionstandart<0:
         positionstandart=0
 
-    #print positionstandart
     xs=copy.copy(  dicstandart[positionstandart]['x'])
     ys=copy.copy(  dicstandart[positionstandart]['y'])
 
@@ -1125,16 +1064,13 @@ def stDownload():
 
 def stPlotar():
 
-    #btnSingleLine.state==ENABLE
-    #btnSingleLine.config(state=ENABLE)
-
     global xs,ys
     mini,maxi=stgetminmax()
     try:
         diciostandart()
         plt2.cla()
         plt2.title('Amostra')
-        plt2.xlabel('2Theta')
+        plt2.xlabel('$2\Theta$')
         plt2.ylabel("Intensity")
         plt2.plot(xs[mini:maxi],ys[mini:maxi],linestyle='-', marker='o')
         plt2.grid()
@@ -1145,16 +1081,13 @@ def stPlotar():
 
 def stPlotarBack():
 
-    #btnSingleLine.state==ENABLE
-    #btnSingleLine.config(state=ENABLE)
-
     global xs,ys
     mini,maxi=stgetminmax()
     try:
 
         plt2.cla()
         plt2.title('Amostra')
-        plt2.xlabel('2Theta')
+        plt2.xlabel('$2\Theta$')
         plt2.ylabel("Intensity")
         plt2.plot(xs[mini:maxi],ys[mini:maxi],linestyle='-', marker='o')
         plt2.grid()
@@ -1187,22 +1120,6 @@ def stNormalizar():
     print 'normalizar'
 
     stPlotar()
-
-#def stCentralizar():
-#    global xs,ys
-#    tamanho=len(ys)
-#    ys=stnormalizar(ys)
-#    if tamanho/2>ys.index(max(ys)):
-#        #print 'maior',tamanho/2-ys.index(max(ys))
-#        lados=tamanho/2-ys.index(max(ys))
-#    else:
-#        #print 'menor'
-#        lados=-tamanho/2+ys.index(max(ys))
-#
-#    indice=ys.index(max(ys))+lados
-#    print "Centralizar"
-#    stPlotar()
-
 
 def stSuavizar():
     print "suavizar"
@@ -1272,6 +1189,8 @@ def Background():
     Plotar()
 
 #Refinament P3
+
+#Single Line Method
 def SingleLine():
     plt.close()
     global x,y,Lv
@@ -1298,12 +1217,13 @@ def SingleLine():
     print "Melhores dados"
     print out.best_values
 
+
     plt.figure(1)
 
     plt.subplot(221)
     plt.plot(x, y,label='original data',linestyle='-', marker='o')
     plt.title('Amostra')
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     plt.grid()
     plt.legend()
@@ -1312,7 +1232,7 @@ def SingleLine():
     plt.subplot(222)
     plt.plot(x, out.best_fit, 'r-',label='best fit',linestyle='-', marker='o')
     plt.title('Amostra')
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     plt.grid()
     plt.legend()
@@ -1354,7 +1274,7 @@ def SingleLine():
     #t.set_bbox(dict(color='red', alpha=0.5, edgecolor='red'))
 
 
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     print D
     print E
@@ -1413,6 +1333,8 @@ def ScherrerMethod():
     plt.show()
 
 #===========================single line double
+
+#SingleLine Method
 def SingleLineDouble():
     plt.close()
     print "Single Line"
@@ -1461,30 +1383,13 @@ def SingleLineDouble():
     out1  = mod.fit(ys, pars1, x=xs)
 
 
-    print "Amostra"
-    print "Saida de dados"
-##    print(out.fit_report())
-
-    print "Melhores dados"
-    print out.best_values
-
-    print ""
-    print ""
-
-    print "Padrao"
-    print "Saida de dados"
-##    print(out1.fit_report())
-
-    print "Melhores dados"
-    print out1.best_values
-
     plt.figure(1)
 
     plt.subplot(221)
     plt.plot(x, y,label='sample data',linestyle='-', marker='o')
     plt.plot(x, out.best_fit, 'r-',label='best sample fit',linestyle='-', marker='o')
     plt.title('SAMPLE')
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     plt.plot(x,y-out.best_fit,label="residuo")
     plt.grid()
@@ -1497,7 +1402,7 @@ def SingleLineDouble():
     plt.plot(xs, out1.best_fit, 'r-',label='best standart fit',linestyle='-', marker='o')
     plt.plot(xs,ys-out1.best_fit,label="residuo")
     plt.title('STANDARD')
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     plt.grid()
     plt.legend()
@@ -1550,7 +1455,7 @@ def SingleLineDouble():
     #t.set_bbox(dict(color='red', alpha=0.5, edgecolor='red'))
 
 
-    plt.xlabel('2Theta')
+    plt.xlabel('$2\Theta$')
     plt.ylabel("Intensity")
     plt.plot(x, out.best_fit, 'r-',label='$L_V(nm)$: ' + str(lv)+ '\n$ <e> $: '+ str(err) ,linestyle='-', marker='o')
     plt.plot(x,y-out.best_fit,label="residuo")
