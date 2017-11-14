@@ -5,18 +5,20 @@
 # Author:      Andre S. B. da Silva
 #
 # Created:     23/02/2017
-# Copyright:   
-# Licence:     
+# Copyright:
+# Licence:
 #-------------------------------------------------------------------------------
 from Tkinter import *
 from ttk import *
 from scipy.stats import lognorm
 from tkFileDialog   import askopenfilename
 from tkFileDialog   import askopenfilename
-from lmfit.models import VoigtModel,PseudoVoigtModel, LinearModel, GaussianModel 
+from lmfit.models import VoigtModel,PseudoVoigtModel, LinearModel, GaussianModel
 from math import sin,cos,pi,radians,tan,sqrt,log1p,log
 from scipy import stats
 from math import sin, cos
+from scipy.signal import savgol_filter
+
 
 import Pmw
 import sys
@@ -45,11 +47,15 @@ La=1
 
 #Unique function
 def radiation(key):
-    dic={"W - 0.0209(nm)":0.0209,
-"Mo - 0.0709(nm)":0.0709,	"Cu - 0.154(nm)":0.154,	"Ag - 0.0559(nm)":0.0559,\
-	"Ga - 0.134(nm)":0.134,	"In - 0.0512(nm)":0.0512, "NN - 0.1033305(nm)":0.1033305
+    dic={
+    "W - 0.0209(nm)":        0.0209,
+    "Mo - 0.0709(nm)":       0.0709,
+    "Cu - 0.154(nm)":        0.154,
+    "Ag - 0.0559(nm)":       0.0559,
+	"Ga - 0.134(nm)":        0.134,
+    "In - 0.0512(nm)":       0.0512,
+    "NN - 0.1033305(nm)":    0.1033305
     }
-
     return dic[key]
 
 def cristalmat():
@@ -140,37 +146,45 @@ def Download():
     f.close()
     print 'salvou dados'
 
+
+
+def Methodremovekalpha(x,y):
+    novoy=[]
+    lambida2=1.541220
+    lambida1=1.537400
+    deltaL = lambida2 - lambida1
+    deltaL = deltaL/lambida1
+    diferenca=x[1]-x[0]
+
+    for i in range(len(y)):
+        deltasoma = x[1]-x[0]
+        ase= np.tan(np.radians(x[i]/2))*2*deltaL/(diferenca)
+        n=1;
+
+        while(ase>deltasoma):
+            deltasoma=deltasoma+diferenca
+            n+=1
+        try:
+            yy=y[i]-0.5*y[i-n]
+
+            if yy<0:yy=(yy+y[i])/8
+
+            novoy.append(yy)
+        except:
+            novoy.append(y[i])
+
+    return novoy
+
+#only for Cu
 def removekalpha():
     pass
 
 def savitzky_golay(y, window_size, order, deriv=0, rate=1):
     print "savitzky-golay"
-    import numpy as np
-    from math import factorial
-
-    try:
-        window_size = np.abs(np.int(window_size))
-        order = np.abs(np.int(order))
-    except ValueError, msg:
-        raise ValueError("window_size and order have to be of type int")
-    if window_size % 2 != 1 or window_size < 1:
-        raise TypeError("window_size size must be a positive odd number")
-    if window_size < order + 2:
-        raise TypeError("window_size is too small for the polynomials order")
-    order_range = range(order+1)
-    half_window = (window_size -1) // 2
-    # precompute coefficients
-    b = np.mat([[k**i for i in order_range] for k in range(-half_window, half_window+1)])
-    m = np.linalg.pinv(b).A[deriv] * rate**deriv * factorial(deriv)
-    # pad the signal at the extremes with
-    # values taken from the signal itself
-    firstvals = y[0] - np.abs( y[1:half_window+1][::-1] - y[0] )
-    lastvals = y[-1] + np.abs(y[-half_window-1:-1][::-1] - y[-1])
-    y = np.concatenate((firstvals, y, lastvals))
-    return np.convolve( m[::-1], y, mode='valid')
+    return savgol_filter(y, window_size,order)
 
 def normalizar(vetor):
-    #print "normalizar"
+    print "normalizar"
     maximo=max(vetor)
     newvetor=[]
     for i in vetor:
@@ -180,7 +194,6 @@ def normalizar(vetor):
 
 def getminmax():
     global x,y
-
 
     mini1=float(bB.get())
     maxi1=float(cC.get())
@@ -207,7 +220,6 @@ def getminmax():
 def Open_file():
     global x,y,x0,y0,namefile
     namefile = askopenfilename()
-
 
     try:
         x,y,z = np.loadtxt(namefile, unpack= True)
@@ -271,9 +283,6 @@ def Fechar():
 
 def Plotar():
 
-    #btnSingleLine.state==ENABLE
-    #btnSingleLine.config(state=ENABLE)
-
     global x,y
     mini,maxi=getminmax()
     try:
@@ -291,9 +300,6 @@ def Plotar():
 
 def PlotarBack():
 
-    #btnSingleLine.state==ENABLE
-    #btnSingleLine.config(state=ENABLE)
-
     global x,y
     mini,maxi=getminmax()
     try:
@@ -310,9 +316,6 @@ def PlotarBack():
         print 'vazio'
 
 def Plotarstandart():
-
-    #btnSingleLine.state==ENABLE
-    #btnSingleLine.config(state=ENABLE)
 
     global xs,ys
     mini,maxi=getminmax()
@@ -353,21 +356,6 @@ def Normalizar():
     print 'normalizar'
 
     Plotar()
-
-#def Centralizar():
-#    global x,y
-#    tamanho=len(y)
-#    y=normalizar(y)
-#    if tamanho/2>y.index(max(y)):
-#        #print 'maior',tamanho/2-y.index(max(y))
-#        lados=tamanho/2-y.index(max(y))
-#    else:
-#        #print 'menor'
-#        lados=-tamanho/2+y.index(max(y))
-#
-#    indice=y.index(max(y))+lados
-#
-#    Plotar()
 
 
 def LorentxPolarization():
@@ -885,8 +873,8 @@ def Fourier():
 ##############
 
 nb = Pmw.NoteBook(root)
-p1 = nb.add('SAMPLE 1')
-p2 = nb.add('STANDARD 1')
+p1 = nb.add('SAMPLE')
+p2 = nb.add('STANDARD')
 ##p1_1 = nb.add('SAMPLE 2')
 ##p2_2 = nb.add('STANDARD 2')
 p3 = nb.add('ANALYSIS ONE PEAKE')
@@ -1238,65 +1226,7 @@ def stBackground():
     xs=xs[mini:maxi]
     ys=ys[mini:maxi]
 
-    menor = min(ys)
-
-    for i in range(len(ys)):
-        ys[i]=ys[i]-menor
-
-    def background (n,ys,xs):
-
-        def list(vetor):
-            newvetor = []
-            for i in vetor:
-                newvetor.append(i)
-
-            return newvetor
-
-        x1=list(xs)
-        ys=list(ys)
-        #print 'dados:', len(x), len(y), len(x1)
-        #print y[-n:]+y[:n]
-        Xn=[]
-
-        for i in x1[:n]:
-            Xn.append(i)
-
-        for i in x1[-n:]:
-            Xn.append(i)
-
-
-        #print len(x1[-n:]+x1[:n]), len(y[-n:]+y[:n]), len(Xn)
-        mod = LinearModel()
-
-        pars = mod.guess(ys[-n:]+ys[:n], x=Xn)
-        out  = mod.fit(ys[-n:]+ys[:n], pars, x=Xn)
-
-        m=out.values['slope']
-        b=out.values['intercept']
-
-        Z=m*xs + b
-        #print 'Z: ',len(Z)
-        minimo = min(Z)
-        for i in range(len(Z)):
-            if Z[i]<minimo:
-                Z[i]=minimo
-
-        return Z
-
-    n=int(spbBack.get())
-    ys=ys-background(n,ys,xs)
-
-    for i in range(len(ys)):
-        if i<n:
-            ys[i]=0
-        elif i>=len(ys)-n:
-            ys[i]=0
-
-    minimo=ys[0]
-    #print minimo
-    for i in range(len(ys)):
-        if ys[i]<=minimo:
-            ys[i]=minimo
+    ys = removerbackground(xs,ys)
 
     stPlotar()
 
@@ -1318,6 +1248,17 @@ def Suavizar():
     y=savitzky_golay(y,w,p)
     Plotar()
 
+def removerbackground(x,y,m=5):
+
+    minimo= np.mean( np.sort(y)[:10])
+    for i in range(len(y)):
+        y[i]=y[i]-minimo
+    slope, intercept, r_value, p_value, std_err = stats.linregress(np.append(x[:m],x[-m:]),np.append(y[:m],y[-m:]))
+    abline_values = [slope * i + intercept for i in x]
+    abline_values=np.asarray(abline_values)
+    return y-abline_values
+
+#Remove BG
 def Background():
     print "Remove Background"
     global x,y
@@ -1326,63 +1267,9 @@ def Background():
     x=x[mini:maxi]
     y=y[mini:maxi]
 
-    def background (n,y,x):
-
-        def list(vetor):
-            newvetor = []
-            for i in vetor:
-                newvetor.append(i)
-
-            return newvetor
-
-        x1=list(x)
-        y=list(y)
-        #print 'dados:', len(x), len(y), len(x1)
-        #print y[-n:]+y[:n]
-        Xn=[]
-
-        for i in x1[:n]:
-            Xn.append(i)
-
-        for i in x1[-n:]:
-            Xn.append(i)
-
-
-        #print len(x1[-n:]+x1[:n]), len(y[-n:]+y[:n]), len(Xn)
-        mod = LinearModel()
-
-        pars = mod.guess(y[-n:]+y[:n], x=Xn)
-        out  = mod.fit(y[-n:]+y[:n], pars, x=Xn)
-
-        m=out.values['slope']
-        b=out.values['intercept']
-
-        Z=m*x + b
-        #print 'Z: ',len(Z)
-        minimo = min(Z)
-        for i in range(len(Z)):
-            if Z[i]<minimo:
-                Z[i]=minimo
-
-        return Z
-
-    n=int(pbBack.get())
-    y=y-background(n,y,x)
-
-    for i in range(len(y)):
-        if i<n:
-            y[i]=0
-        elif i>=len(y)-n:
-            y[i]=0
-
-    minimo=y[0]
-    #print minimo
-    for i in range(len(y)):
-        if y[i]<=minimo:
-            y[i]=minimo
+    y = removerbackground(x,y)
 
     Plotar()
-
 
 #Refinament P3
 def SingleLine():
@@ -1485,7 +1372,7 @@ def SingleLine():
 def ScherrerMethod():
     plt.close()
     print "Scherrer"
-    global x,y,xs,ys,Lv    
+    global x,y,xs,ys,Lv
 
     mini,maxi=getminmax()
     minis,maxis=stgetminmax()
@@ -1502,7 +1389,7 @@ def ScherrerMethod():
 #    pars['gamma'].set(value=0.7, vary=True, expr='')
 #    pars1['gamma'].set(value=0.7, vary=True, expr='')
     out  = mod.fit(y, pars, x=x)
-    out1  = mod.fit(ys, pars1, x=xs)    
+    out1  = mod.fit(ys, pars1, x=xs)
 
     try:
         z1=pow(out.best_values['sigma'],2)
