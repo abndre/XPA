@@ -6,7 +6,7 @@
 #
 # Created:     23/02/2017
 # Copyright:
-# Licence:
+# Licence:    Free for Academic
 #-------------------------------------------------------------------------------
 from Tkinter import *
 from ttk import *
@@ -98,7 +98,6 @@ def returnvaluessample():
     x=copy.copy(  dicsample[positionsampl]['x'])
     y=copy.copy(  dicsample[positionsampl]['y'])
     PlotarBack()
-#STANDARD
 
 def Download():
     global x,y
@@ -115,8 +114,7 @@ def Download():
     f.close()
     print 'salvou dados'
 
-
-
+#only for Cu
 def Methodremovekalpha(x,y):
     novoy=[]
     lambida2=1.541220
@@ -144,7 +142,7 @@ def Methodremovekalpha(x,y):
 
     return novoy
 
-#only for Cu
+
 def removekalpha():
     pass
 
@@ -158,7 +156,6 @@ def normalizar(vetor):
     newvetor=[]
     for i in vetor:
         newvetor.append(i/maximo)
-
     return newvetor
 
 def getminmax():
@@ -183,7 +180,6 @@ def getminmax():
     mini = np.searchsorted(x,getminimo)
     maxi = np.searchsorted(x,getmaximo)
     return mini, maxi
-
 
 
 def Open_file():
@@ -246,6 +242,19 @@ def Resetar_standart():
     bB.insert(1,xs[0])
 
     PlotarStandart()
+
+
+def Background():
+    print "background"
+    global x,y
+    mini,maxi=getminmax()
+
+    x=x[mini:maxi]
+    y=y[mini:maxi]
+
+    y = removerbackground(x,y)
+    Plotar()
+
 
 def Fechar():
     plt.close()
@@ -323,7 +332,6 @@ def Normalizar():
     y=y[mini:maxi]
     y=normalizar(y)
     print 'normalizar'
-
     Plotar()
 
 
@@ -334,10 +342,8 @@ def LorentxPolarization():
     x=x[mini:maxi]
     y=y[mini:maxi]
 
-
     for i in range(len(y)):
         y[i]/=(1+pow(cos(radians( x[i])),2))/(  cos( radians( x[i]))*pow(sin( radians( x[i])),2))
-
     Plotar()
 
 def Suavizar():
@@ -354,75 +360,6 @@ def Suavizar():
     y=savitzky_golay(y,w,p)
     Plotar()
 
-def Background():
-    global x,y
-    mini,maxi=getminmax()
-
-    x=x[mini:maxi]
-    y=y[mini:maxi]
-
-    menor=min(y)
-
-    for i in range(len(y)):
-        y[i]=y[i]-menor
-
-
-    def background (n,y,x):
-
-        def list(vetor):
-            newvetor = []
-            for i in vetor:
-                newvetor.append(i)
-
-            return newvetor
-
-        x1=list(x)
-        y=list(y)
-        #print 'dados:', len(x), len(y), len(x1)
-        #print y[-n:]+y[:n]
-        Xn=[]
-
-        for i in x1[:n]:
-            Xn.append(i)
-
-        for i in x1[-n:]:
-            Xn.append(i)
-
-
-        #print len(x1[-n:]+x1[:n]), len(y[-n:]+y[:n]), len(Xn)
-        mod = LinearModel()
-
-        pars = mod.guess(y[-n:]+y[:n], x=Xn)
-        out  = mod.fit(y[-n:]+y[:n], pars, x=Xn)
-
-        m=out.values['slope']
-        b=out.values['intercept']
-
-        Z=m*x + b
-        #print 'Z: ',len(Z)
-        minimo = min(Z)
-        for i in range(len(Z)):
-            if Z[i]<minimo:
-                Z[i]=minimo
-
-        return Z
-
-    n=int(pbBack.get())
-    y=y-background(n,y,x)
-
-    for i in range(len(y)):
-        if i<n:
-            y[i]=0
-        elif i>=len(y)-n:
-            y[i]=0
-
-    minimo=y[0]
-    #print minimo
-    for i in range(len(y)):
-        if y[i]<=minimo:
-            y[i]=minimo
-    print "Background"
-    Plotar()
 
 def FourierDouble():
     print "Fourier"
@@ -900,7 +837,7 @@ btnNormalizar = Button(p1, text="SMOOTH", command = Suavizar).place(x=horizontal
 vertical+=30
 btnCentralizar = Button(p1, text="LORENTZPOLARIZATION",state=NORMAL,command = LorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
-btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = removekalpha).place(x=horizontal,y=vertical)
+btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = Methodremovekalpha).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p1, text="BACKGROUND",command = Background).place(x=horizontal,y=vertical)
 
@@ -1393,7 +1330,6 @@ def NewSingleLineDouble():
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
-    pdb.set_trace()
 
     try:
         G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
