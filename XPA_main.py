@@ -1586,9 +1586,11 @@ texto = Label(p4,text='Under construction').place(x=horizontal,y=vertical)
 
 #WINDOW BUTTONS AND POSITIONS
 #########################################
-ak=vertical-3
+ak=vertical+15
 Fmin=0
 Fmax=4
+
+horizontal = 365
 
 xc = Label(p3, text = "Min")
 beta=horizontal+85
