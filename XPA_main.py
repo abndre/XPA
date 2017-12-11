@@ -75,8 +75,56 @@ def close_window ():
     Fechar()
     root.destroy()
 
+def removerbackground(x,y,m=5):
 
-##############
+    minimo= np.mean( np.sort(y)[:10])
+    for i in range(len(y)):
+        y[i]=y[i]-minimo
+    slope, intercept, r_value, p_value, std_err = stats.linregress(np.append(x[:m],x[-m:]),np.append(y[:m],y[-m:]))
+    abline_values = [slope * i + intercept for i in x]
+    abline_values=np.asarray(abline_values)
+    return y-abline_values
+
+#only for Cu
+def Methodremovekalpha(x,y):
+    novoy=[]
+    lambida2=1.541220
+    lambida1=1.537400
+    deltaL = lambida2 - lambida1
+    deltaL = deltaL/lambida1
+    diferenca=x[1]-x[0]
+
+    for i in range(len(y)):
+        deltasoma = x[1]-x[0]
+        ase= np.tan(np.radians(x[i]/2))*2*deltaL/(diferenca)
+        n=1;
+
+        while(ase>deltasoma):
+            deltasoma=deltasoma+diferenca
+            n+=1
+        try:
+            yy=y[i]-0.5*y[i-n]
+
+            if yy<0:yy=(yy+y[i])/8
+
+            novoy.append(yy)
+        except:
+            novoy.append(y[i])
+
+    return novoy
+
+def savitzky_golay(y, window_size, order, deriv=0, rate=1):
+    print "savitzky-golay"
+    return savgol_filter(y, window_size,order)
+
+def normalizar(vetor):
+    print "normalizar"
+    maximo=max(vetor)
+    newvetor=[]
+    for i in vetor:
+        newvetor.append(i/maximo)
+    return newvetor
+
 #SAMPLE
 def diciosample():
 
@@ -114,49 +162,9 @@ def Download():
     f.close()
     print 'salvou dados'
 
-#only for Cu
-def Methodremovekalpha(x,y):
-    novoy=[]
-    lambida2=1.541220
-    lambida1=1.537400
-    deltaL = lambida2 - lambida1
-    deltaL = deltaL/lambida1
-    diferenca=x[1]-x[0]
-
-    for i in range(len(y)):
-        deltasoma = x[1]-x[0]
-        ase= np.tan(np.radians(x[i]/2))*2*deltaL/(diferenca)
-        n=1;
-
-        while(ase>deltasoma):
-            deltasoma=deltasoma+diferenca
-            n+=1
-        try:
-            yy=y[i]-0.5*y[i-n]
-
-            if yy<0:yy=(yy+y[i])/8
-
-            novoy.append(yy)
-        except:
-            novoy.append(y[i])
-
-    return novoy
-
-
 def removekalpha():
     pass
 
-def savitzky_golay(y, window_size, order, deriv=0, rate=1):
-    print "savitzky-golay"
-    return savgol_filter(y, window_size,order)
-
-def normalizar(vetor):
-    print "normalizar"
-    maximo=max(vetor)
-    newvetor=[]
-    for i in vetor:
-        newvetor.append(i/maximo)
-    return newvetor
 
 def getminmax():
     global x,y
@@ -1099,7 +1107,15 @@ def stBackground():
     stPlotar()
 
 def stdoublekalpha():
-    pass
+    global xs,ys
+    mini,maxi=stgetminmax()
+
+    xs=xs[mini:maxi]
+    ys=ys[mini:maxi]
+
+    ys = Methodremovekalpha(xs,ys)
+
+    stPlotar()
 
 
 def Suavizar():
@@ -1116,15 +1132,7 @@ def Suavizar():
     y=savitzky_golay(y,w,p)
     Plotar()
 
-def removerbackground(x,y,m=5):
 
-    minimo= np.mean( np.sort(y)[:10])
-    for i in range(len(y)):
-        y[i]=y[i]-minimo
-    slope, intercept, r_value, p_value, std_err = stats.linregress(np.append(x[:m],x[-m:]),np.append(y[:m],y[-m:]))
-    abline_values = [slope * i + intercept for i in x]
-    abline_values=np.asarray(abline_values)
-    return y-abline_values
 
 #Remove BG
 def Background():
