@@ -75,6 +75,16 @@ def close_window ():
     Fechar()
     root.destroy()
 
+def LP(x,y):
+
+    for i in range(len(y)):
+        try:
+            y[i]/=(1+pow(cos(radians( x[i])),2))/(  cos( radians( x[i]))*pow(sin( radians( x[i])),2))
+        except:
+            y[i]=y[i]
+
+    return y
+
 def removerbackground(x,y,m=5):
 
     minimo= np.mean( np.sort(y)[:10])
@@ -162,8 +172,16 @@ def Download():
     f.close()
     print 'salvou dados'
 
-def removekalpha():
-    pass
+def doublekalpha():
+    global x,y
+    mini,maxi=getminmax()
+
+    x=x[mini:maxi]
+    y=y[mini:maxi]
+
+    y = Methodremovekalpha(x,y)
+
+    Plotar()
 
 
 def getminmax():
@@ -350,8 +368,8 @@ def LorentxPolarization():
     x=x[mini:maxi]
     y=y[mini:maxi]
 
-    for i in range(len(y)):
-        y[i]/=(1+pow(cos(radians( x[i])),2))/(  cos( radians( x[i]))*pow(sin( radians( x[i])),2))
+    y = LP(x,y)
+
     Plotar()
 
 def Suavizar():
@@ -845,7 +863,7 @@ btnNormalizar = Button(p1, text="SMOOTH", command = Suavizar).place(x=horizontal
 vertical+=30
 btnCentralizar = Button(p1, text="LORENTZPOLARIZATION",state=NORMAL,command = LorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
-btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = stdoublekalpha).place(x=horizontal,y=vertical)
+btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = doublekalpha).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p1, text="BACKGROUND",command = Background).place(x=horizontal,y=vertical)
 
@@ -890,11 +908,7 @@ def stLorentxPolarization():
     xs=xs[mini:maxi]
     ys=ys[mini:maxi]
 
-    for i in range(len(ys)):
-        try:
-            ys[i]/=(1+pow(cos(radians( xs[i])),2))/(  cos( radians( xs[i]))*pow(sin( radians( xs[i])),2))
-        except:
-            ys[i]=ys[i]
+    ys = LP(xs,ys)
 
     stPlotar()
 
@@ -1117,16 +1131,7 @@ def stdoublekalpha():
 
     stPlotar()
 
-def doublekalpha():
-    global x,y
-    mini,maxi=getminmax()
 
-    x=x[mini:maxi]
-    y=y[mini:maxi]
-
-    y = Methodremovekalpha(x,y)
-
-    Plotar()
 
 
 def Suavizar():
@@ -1301,20 +1306,20 @@ def ScherrerMethod():
     #pdb.set_trace()
     scherrervalue = (0.89*lambida)/(wg*cosseno)
 
-    scherrervalue = int (scherrervalue)
+    scherrervalue = int(scherrervalue)
 
     print scherrervalue , ' nm'
-    plt.plot(x,y,'bo')
+    plt.plot(x,y,'ko',label ='data')
     #plt.plot(xs,ys)
     #plt.plot(xs, out1.best_fit, 'k--')
-    plt.plot(x, out.best_fit, 'r-')
-    plt.plot(x, out.init_fit, 'k--')
+    plt.plot(x, out.best_fit, 'k-',label='best fit')#str(scherrervalue) + ' nm'
+    plt.plot(x, out.init_fit, 'k--',label = 'init fit' )
 
     x=copyx
     xs=copyxs
     y=copyy
     ys=copyys
-
+    plt.legend()
     plt.show()
 
 #===========================single line double
