@@ -845,7 +845,7 @@ btnNormalizar = Button(p1, text="SMOOTH", command = Suavizar).place(x=horizontal
 vertical+=30
 btnCentralizar = Button(p1, text="LORENTZPOLARIZATION",state=NORMAL,command = LorentxPolarization).place(x=horizontal,y=vertical)
 vertical+=30
-btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = Methodremovekalpha).place(x=horizontal,y=vertical)
+btnCentralizar = Button(p1, text="DOUBLETOKALPHA",command = stdoublekalpha).place(x=horizontal,y=vertical)
 vertical+=30
 btnCentralizar = Button(p1, text="BACKGROUND",command = Background).place(x=horizontal,y=vertical)
 
@@ -1116,6 +1116,17 @@ def stdoublekalpha():
     ys = Methodremovekalpha(xs,ys)
 
     stPlotar()
+
+def doublekalpha():
+    global x,y
+    mini,maxi=getminmax()
+
+    x=x[mini:maxi]
+    y=y[mini:maxi]
+
+    y = Methodremovekalpha(x,y)
+
+    Plotar()
 
 
 def Suavizar():
