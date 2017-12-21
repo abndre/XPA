@@ -20,6 +20,12 @@ lambida = 0.154
 #files  =['ZnO_50_Riet_XY.ASC','ZnO_STD_Riet.ASC',[(35.2,37.7),(75.8,78.2)],'101','202']#100, #200
 #files =['ZnO_70_Riet_XY.ASC','ZnO_STD_Riet.ASC',[(35.2,37.7),(75.8,78.2)],'101','202']#100, #200
 files  =['ZnO_90_Riet_XY.ASC','ZnO_STD_Riet.ASC',[(35.2,37.7),(75.8,78.2)],'101','202']#100, #200
+
+files  =['lebailbr_amostra.xy','lebailsh_instrumento.xy',[(27.0,30.0),(58.3,60.5)],'111','222']#100, #200
+
+
+
+
 name_file = files[0].split('_Riet')[0]
 
 
@@ -296,6 +302,8 @@ plt.plot(x3[:manv],y3[:manv],'-o')
 p7= polyfit(x3[:manv],y3[:manv],9)
 plt.plot(x3[:manv],polyval(p7,x3[:manv])[:manv],'-o',label=files[3])
 plt.legend()
+
+manv=15
 
 plt.subplot(L,C,P);P=P+1
 plt.plot(x4[:manv],y4[:manv],'-o')
