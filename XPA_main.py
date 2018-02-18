@@ -85,6 +85,20 @@ def LP(x,y):
 
     return y
 
+def removerzero(vetor):
+    for key, value in enumerate(vetor):
+        if value <0:
+            vetor[key]=0
+
+    for key,value in enumerate(vetor):
+        try:
+            if vetor[key+1]==0 and value >0:
+                vetor[key]=0
+        except:
+            pass
+
+    return vetor
+
 def removerbackground(x,y,m=5):
 
     minimo= np.mean( np.sort(y)[:10])
@@ -93,7 +107,7 @@ def removerbackground(x,y,m=5):
     slope, intercept, r_value, p_value, std_err = stats.linregress(np.append(x[:m],x[-m:]),np.append(y[:m],y[-m:]))
     abline_values = [slope * i + intercept for i in x]
     abline_values=np.asarray(abline_values)
-    return y-abline_values
+    return removerzero(y-abline_values)
 
 #only for Cu
 def Methodremovekalpha(x,y):
@@ -1292,11 +1306,20 @@ def ScherrerMethod():
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
+
+    print (out.best_values)
+    print (out1.best_values)
     try:
-        z1=pow(out.best_values['sigma'],2)
-        z2=pow(out1.best_values['sigma'],2)
+        z1=out.best_values['sigma']
+        z2=out1.best_values['sigma']
+
+        z1 = np.radians(z1)
+        z2 = np.radians(z2)
+
+        z1=pow(z1,2)
+        z2=pow(z1,2)
+
         wg=sqrt(z1-z2)
-        wg = np.radians(wg)
     except:
         pass
 
@@ -1354,6 +1377,8 @@ def NewSingleLineDouble():
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
+    print (out.best_values)
+    print (out1.best_values)
 
     try:
         G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
