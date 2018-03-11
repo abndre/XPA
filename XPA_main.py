@@ -47,7 +47,7 @@ def radiation(key):
     dic={
     "W - 0.0209(nm)":        0.0209,
     "Mo - 0.0709(nm)":       0.0709,
-    "Cu - 0.154(nm)":        0.154,
+    "Cu - 0.154(nm)":        0.154056,
     "Ag - 0.0559(nm)":       0.0559,
 	"Ga - 0.134(nm)":        0.134,
     "In - 0.0512(nm)":       0.0512,
@@ -501,8 +501,8 @@ def FourierDouble():
     plt.subplot(212)
 
     plt.grid()
-
-    plt.plot(newarmonico[0:30],newAN[0:30], c='k',linestyle='-', marker='o',label='$L_A(nm)$: '+str(int(XS)))
+    pdb.set_trace()
+    plt.plot(newarmonico[0:10],newAN[0:10], c='k',linestyle='-', marker='o',label='$L_A(nm)$: '+str(int(XS)))
     plt.plot(lx,ly, 'red')
     plt.xlabel('L(nm)')
     plt.ylabel("A(L)")
@@ -1296,13 +1296,13 @@ def ScherrerMethod():
 
     lambida=radiation(comboBoxrad.get())
 
+    #mod = methodfunciont((comboBox.get()))
+
     mod = GaussianModel()
 
 
     pars = mod.guess(y, x=x)
     pars1 = mod.guess(ys, x=xs)
-#    pars['gamma'].set(value=0.7, vary=True, expr='')
-#    pars1['gamma'].set(value=0.7, vary=True, expr='')
     out  = mod.fit(y, pars, x=x)
     out1  = mod.fit(ys, pars1, x=xs)
 
@@ -1310,24 +1310,32 @@ def ScherrerMethod():
     print (out.best_values)
     print (out1.best_values)
     try:
+
+        #if mod = 'GaussianModel'
         z1=out.best_values['sigma']
         z2=out1.best_values['sigma']
-
-        z1 = np.radians(z1)
-        z2 = np.radians(z2)
+        #else:
+            #z1=out.best_values['sigma']
+            #z2=out1.best_values['sigma']
 
         z1=pow(z1,2)
         z2=pow(z1,2)
 
         wg=sqrt(z1-z2)
+        print wg, 'radians'
+        wg=np.radians(wg)
+
     except:
         pass
 
-    cosseno = out.best_values['center']/2
+    print wg
 
-    cosseno = np.radians(cosseno)
+    cosseno = out.best_values['center']/2
+    cosseno = cos(np.radians(cosseno))
+
+
     #pdb.set_trace()
-    scherrervalue = (0.89*lambida)/(wg*cosseno)
+    scherrervalue = (0.94*lambida)/(wg*cosseno)
 
     scherrervalue = int(scherrervalue)
 
@@ -1364,21 +1372,30 @@ def NewSingleLineDouble():
     xs=xs[minis:maxis]
     ys=ys[minis:maxis]
     #pdb.set_trace()
-    mod = methodfunciont((comboBox1.get()))
-    print mod
-    #mod = VoigtModel()
-    pars = mod.guess(y, x=x)
-    pars1 = mod.guess(ys, x=xs)
-    try:
-        pars['gamma'].set(value=0.3, vary=True, expr='')
-        pars1['gamma'].set(value=0.3, vary=True, expr='')
-    except:
-        pass
-    out  = mod.fit(y, pars, x=x)
-    out1  = mod.fit(ys, pars1, x=xs)
+    #mod = methodfunciont((comboBox1.get()))
+    #print mod
+    mod = VoigtModel()
 
-    print (out.best_values)
-    print (out1.best_values)
+    pars = mod.guess(y, x=x)
+##    pars['gamma'].set(value=0.5, vary=True, expr='')
+##    pars['sigma'].set(value=0.5, vary=True, expr='')
+    out  = mod.fit(y, pars, x=x)
+
+    pars1 = mod.guess(ys, x=xs)
+##    pars1['gamma'].set(value=0.5, vary=True, expr='')
+##    pars1['sigma'].set(value=0.5, vary=True, expr='')
+    out1 = mod.fit(ys, pars1, x=xs)
+
+
+    if out.best_values['gamma'] < out.best_values['gamma']:
+        pars = mod.guess(y, x=x)
+        out  = mod.fit(y, pars, x=x)
+
+        pars1 = mod.guess(ys, x=xs)
+        out1  = mod.fit(ys, pars1, x=xs)
+
+    print (out.values)
+    print (out1.values)
 
     try:
         G= np.sqrt(((2.3548200*1.06446701943*np.radians(out.best_values['sigma']))**2-(2.3548200*1.06446701943*np.radians(out1.best_values['sigma']))**2))
@@ -1388,8 +1405,6 @@ def NewSingleLineDouble():
         G=0
 
     L=np.radians(2*out.best_values['gamma'])*1.57079632679-np.radians(2*out1.best_values['gamma'])*1.57079632679
-
-
 
 
 
@@ -1406,14 +1421,25 @@ def NewSingleLineDouble():
 
     print 'D',D, 'RMSS',RMSS
 
+    plt.figure(1)
+    plt.subplot(121)
     plt.grid()
     plt.xlabel('$2\Theta$',size=15)
     plt.ylabel("Normalized(u.a)",size=15)
 
-    plt.plot(x,y,'k+',label='Amostra')
-    plt.plot(xs,ys,'k:',label='Padrao')
+    plt.plot(x,y,'k-+',label='Amostra')
     plt.plot(x,out.best_fit, 'k-' ,label='Best Fit')
-    plt.plot(x,y-out.best_fit,'k--',label='Residual')
+
+    plt.legend()
+
+
+    plt.subplot(122)
+    plt.grid()
+    plt.xlabel('$2\Theta$',size=15)
+    plt.ylabel("Normalized(u.a)",size=15)
+
+    plt.plot(xs,ys,'k-+',label='Padrao')
+    plt.plot(xs,out1.best_fit,'k--',label='Best Fit')
     plt.legend()
 
     x=copyx
@@ -1673,7 +1699,7 @@ def defocus(event):
     event.widget.master.focus_set()
 
 
-comboBox1 = Combobox(p3, state="readonly", values=("VoigtModel", "PseudoVoigtModel"))
+comboBox1 = Combobox(p3, state="readonly", values=("VoigtModel"))#, "PseudoVoigtModel"))
 comboBox1.grid()
 comboBox1.set("VoigtModel")
 comboBox1.place(x=horizontal,y=vertical)
@@ -1682,7 +1708,7 @@ comboBox1.bind("<FocusIn>", defocus)
 
 horizontal=90
 vertical=42
-comboBox = Combobox(p3, state="readonly", values=("GaussianModel", "PseudoVoigtModel"))
+comboBox = Combobox(p3, state="readonly", values=("GaussianModel"))#, "PseudoVoigtModel"))
 comboBox.grid()
 comboBox.set("GaussianModel")
 comboBox.place(x=horizontal,y=vertical)
