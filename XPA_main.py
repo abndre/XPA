@@ -815,8 +815,8 @@ p1 = nb.add('SAMPLE')
 p2 = nb.add('STANDARD')
 ##p1_1 = nb.add('SAMPLE 2')
 ##p2_2 = nb.add('STANDARD 2')
-p3 = nb.add('ANALYSIS ONE PEAKE')
-p4 = nb.add('ANALYSIS MORE PEAKES')
+p3 = nb.add('ANALYSIS ONE PEAK')
+p4 = nb.add('ANALYSIS MORE PEAKS')
 
 nb.pack(padx=5, pady=5, fill=BOTH, expand=1)
 
@@ -847,8 +847,8 @@ vertical=40
 btnNormalizar = Button(p1, text="NORMALIZE", command = Normalizar).place(x=horizontal,y=vertical)
 
 
-texto = Label(p1,text='FOR MORE PEAKES').place(x=horizontal+350,y=vertical-30)
-btnNormalizar = Button(p1, text="ADD PEAKE").place(x=horizontal+350,y=vertical)
+texto = Label(p1,text='FOR MORE PEAKS').place(x=horizontal+350,y=vertical-30)
+btnNormalizar = Button(p1, text="ADD PEAK").place(x=horizontal+350,y=vertical)
 
 vertical+=30
 ##################################polinomios
@@ -1344,7 +1344,12 @@ def ScherrerMethod():
     #plt.plot(xs,ys)
     #plt.plot(xs, out1.best_fit, 'k--')
     plt.plot(x, out.best_fit, 'k-',label='best fit')#str(scherrervalue) + ' nm'
-    plt.plot(x, out.init_fit, 'k--',label = 'init fit' )
+    #plt.plot(x, out.init_fit, 'k--',label = 'init fit' )
+
+    plt.title('Amostra')
+    plt.xlabel('$2\Theta$')
+    plt.ylabel("Intensity")
+    plt.grid()
 
     x=copyx
     xs=copyxs
@@ -1479,8 +1484,8 @@ vertical=40
 
 btnNormalizar = Button(p2, text="NORMALIZE", command = stNormalizar).place(x=horizontal,y=vertical)
 
-texto = Label(p2,text='FOR MORE PEAKES').place(x=horizontal+350,y=vertical-30)
-btnNormalizar = Button(p2, text="ADD PEAKE").place(x=horizontal+350,y=vertical)
+texto = Label(p2,text='FOR MORE PEAKS').place(x=horizontal+350,y=vertical-30)
+btnNormalizar = Button(p2, text="ADD PEAK").place(x=horizontal+350,y=vertical)
 
 vertical+=30
 ##################################polinomios
@@ -1563,7 +1568,7 @@ btngetsample = Button(p2,  text="Get from Sample", command = getsample).place(x=
 #P3 ABA
 ########################
 horizontal=5
-texto = Label(p3,text='ANALYSIS ONE PEAKE').place(x=horizontal,y=5)
+texto = Label(p3,text='ANALYSIS ONE PEAK').place(x=horizontal,y=5)
 
 
 vertical=40
