@@ -67,9 +67,7 @@ def methodfunciont(key):
 def cristalmat():
     import tkMessageBox
     tkMessageBox.showinfo("XPA - CristalMat",\
-    "Este e um programa gratuito\
-     \ndesenvolvido e distribuido pelo grupo de pesquisa\nCristalMat -\
-    IPEN\nhttp://www.cristalmat.net/")
+   "This is a free program \n developed and distributed by research group \nCrystalMat IPEN\nhttp://www.cristalmat.net/")
 
 def close_window ():
     Fechar()
@@ -830,7 +828,7 @@ btnPlotar = Button(p1, text="SAMPLE",command=Open_file).place(x=horizontal,y=ver
 vertical+=30
 btnPlotar = Button(p1, text="PLOT", command = Plotar).place(x=horizontal,y=vertical)
 vertical+=30
-btnResetar = Button(p1, text="RESETAR", command = Resetar).place(x=horizontal,y=vertical)
+btnResetar = Button(p1, text="RESET", command = Resetar).place(x=horizontal,y=vertical)
 vertical+=30
 btnPlotar = Button(p1, text="CLOSE", command = Fechar).place(x=horizontal,y=vertical)
 vertical+=30
@@ -1469,7 +1467,7 @@ btnPlotar = Button(p2, text="STANDARD",command = stOpen_file).place(x=horizontal
 vertical+=30
 btnPlotar = Button(p2, text="PLOT", command = stPlotar).place(x=horizontal,y=vertical)
 vertical+=30
-btnResetar = Button(p2, text="RESETAR", command = stResetar).place(x=horizontal,y=vertical)
+btnResetar = Button(p2, text="RESET", command = stResetar).place(x=horizontal,y=vertical)
 vertical+=30
 btnPlotar = Button(p2, text="CLOSE", command = Fechar).place(x=horizontal,y=vertical)
 vertical+=30
